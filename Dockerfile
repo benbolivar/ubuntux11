@@ -1,15 +1,14 @@
-FROM ubuntu
+#FROM ubuntu
+FROM openjdk:8u181-jdk-slim-stretch
 
 EXPOSE 8080 8000 5900
 
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
-    cp /usr/share/zoneinfo/Asia/Manila /etc/localtime
-
-RUN apt-get update && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog &&
+    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
+    cp /usr/share/zoneinfo/Asia/Manila /etc/localtime && \
     apt-get -y install sudo wget unzip curl && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
@@ -20,15 +19,7 @@ RUN apt-get update && \
 USER user
 
 RUN sudo apt-get update -qqy && \
-  sudo apt-get -qqy install \
-  supervisor \
-  x11vnc \
-  xvfb \
-  subversion \
-  net-tools \
-  blackbox \
-  rxvt-unicode \
-  xfonts-terminus
+  sudo apt-get -qqy install supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus
 
 USER root
 
@@ -63,26 +54,20 @@ ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 
 ENV PATH=$M2_HOME/bin:$PATH
 
-RUN sudo apt-get -qqy install openjdk-8-jre
-RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
-  sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/
-RUN sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
-    sudo rm -rf /home/user/tomcat8/webapps/*
-
 ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 
-# Add run commands in /home/user/.bashrc
-RUN echo "export JAVA_HOME=/opt/jdk$JAVA_VERSION_PREFIX\n\
-export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
-export TOMCAT_HOME=/home/user/tomcat8\n\
-export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH\n\
-if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
-sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc
-
-RUN sudo locale-gen en_US.UTF-8
-
-RUN sudo mkdir -p /etc/pki/tls/certs && \
+RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
+    sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
+    sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
+    sudo rm -rf /home/user/tomcat8/webapps/* && \
+    echo "export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
+    export TOMCAT_HOME=/home/user/tomcat8\n\
+    export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH\n\
+    if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
+    sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc && \
+    sudo locale-gen en_US.UTF-8 && \
+    sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem
@@ -93,16 +78,14 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y software-properties-common 
-RUN apt-get update && apt-get install -y libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove
-RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module
-RUN apt-get install -y g++ libboost-all-dev build-essential gdb cmake
+RUN apt-get update && apt-get install -y autoremove software-properties-common libxext-dev libxrender-dev libxtst-dev \
+    libgtk2.0-0 libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz
-RUN sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
+RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
+    sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
 
 USER user
 
