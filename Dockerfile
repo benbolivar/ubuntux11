@@ -74,7 +74,7 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y autoremove software-properties-common libxext-dev libxrender-dev libxtst-dev \
+RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev \
     libgtk2.0-0 libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
