@@ -8,7 +8,7 @@ ENV DISP_SIZE 1600x900x16
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog wget unzip mc curl && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
-    echo "secret\nsecret" | passwd user &&
+    echo "secret\nsecret" | passwd user && \
     apt-get -qqy install supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus dbus-x11 python-numpy
     
 USER user
