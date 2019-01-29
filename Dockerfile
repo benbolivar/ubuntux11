@@ -50,8 +50,6 @@ ENV MAVEN_VERSION=3.3.9 \
     TOMCAT_HOME=/home/user/tomcat8
 ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 ENV PATH=$M2_HOME/bin:$PATH
-ENV LANG en_GB.UTF-8
-ENV LANG en_US.UTF-8
 
 RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
     sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
@@ -61,8 +59,12 @@ RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VE
     export TOMCAT_HOME=/home/user/tomcat8\n\
     export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH\n\
     if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
-    sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc && \
-    sudo locale-gen en_US.UTF-8 && \
+    sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc
+
+ENV LANG en_GB.UTF-8
+ENV LANG en_US.UTF-8
+
+RUN sudo locale-gen en_US.UTF-8 && \
     sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
