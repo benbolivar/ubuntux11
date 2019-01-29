@@ -57,8 +57,8 @@ USER root
 ENV USER_NAME=user \
     HOME=/home/${USER_NAME}
 
-ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R \
-    ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
+ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
+ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
 RUN apt-get install -y g++ build-essential gdb cmake && \
     wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
