@@ -10,12 +10,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
     cp /usr/share/zoneinfo/Asia/Manila /etc/localtime
 
 RUN apt-get update && \
-    apt-get -y install sudo procps wget unzip mc curl gnupg2 vim && \
+    apt-get -y install sudo wget unzip curl && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user
 
-# install midori (browser), xserver, blackbox
+# install xserver, blackbox
 
 USER user
 
@@ -32,9 +32,7 @@ RUN sudo apt-get update -qqy && \
 
 USER root
 
-RUN apt-get install -y libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy && \
-    wget http://archive.ubuntu.com/ubuntu/pool/universe/m/midori/midori_0.5.11-ds1-2_amd64.deb && \
-    dpkg -i midori_0.5.11-ds1-2_amd64.deb
+RUN apt-get install -y libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 dbus-x11 python-numpy
 
 USER user
 
@@ -42,11 +40,9 @@ USER user
 RUN sudo mkdir -p /opt/noVNC/utils/websockify && \
     wget -qO- "http://github.com/kanaka/noVNC/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC && \
     wget -qO- "https://github.com/kanaka/websockify/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC/utils/websockify && \
-    sudo apt-get install -y firefox && \
     sudo mkdir -p /etc/X11/blackbox && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
-    [exec] (Browser)     {midori} \n \
     [exec] (Firefox)     {firefox} \n \
     [exec] (Eclipse CDT) {/opt/eclipse/eclipse} \n \
     [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu
