@@ -5,25 +5,12 @@ EXPOSE 8080 8000 5900
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
-    cp /usr/share/zoneinfo/Asia/Manila /etc/localtime && \
-    apt-get -y install sudo procps wget unzip mc curl gnupg2 vim && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog wget unzip mc curl && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
-    echo "secret\nsecret" | passwd user
+    echo "secret\nsecret" | passwd user &&
+    apt-get -qqy install supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus dbus-x11 python-numpy
     
-# install xserver, blackbox
-
-USER user
-
-RUN sudo apt-get update -qqy && \
-  sudo apt-get -qqy install supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus
-
-USER root
-
-RUN apt-get install -y libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 dbus-x11 python-numpy
-
 USER user
 
 # download and install noVNC, Firefox, Eclipse CDT, configure Blackbox
@@ -64,8 +51,7 @@ RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VE
 ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 
-RUN sudo locale-gen en_US.UTF-8 && \
-    sudo mkdir -p /etc/pki/tls/certs && \
+RUN sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem
@@ -76,13 +62,11 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev \
-    libgtk2.0-0 libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake
-
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
+RUN apt-get install -y g++ build-essential gdb cmake &&
+    wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
     sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
 
 USER user
