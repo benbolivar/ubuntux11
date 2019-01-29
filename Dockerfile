@@ -1,4 +1,3 @@
-#FROM ubuntu
 FROM openjdk:8u181-jdk-slim-stretch
 
 EXPOSE 8080 8000 5900
@@ -6,14 +5,14 @@ EXPOSE 8080 8000 5900
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog &&
-    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
     cp /usr/share/zoneinfo/Asia/Manila /etc/localtime && \
-    apt-get -y install sudo wget unzip curl && \
+    apt-get -y install sudo procps wget unzip mc curl gnupg2 vim && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user
-
+    
 # install xserver, blackbox
 
 USER user
@@ -49,11 +48,8 @@ ENV DISPLAY :20.0
 
 ENV MAVEN_VERSION=3.3.9 \
     TOMCAT_HOME=/home/user/tomcat8
-
 ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
-
 ENV PATH=$M2_HOME/bin:$PATH
-
 ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 
