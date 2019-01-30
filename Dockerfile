@@ -1,4 +1,4 @@
-FROM openjdk:8u191-jre-alpine3.8
+FROM openjdk:8u181-jre-slim-stretch
 
 EXPOSE 8080 8000 5900
 
