@@ -1,4 +1,4 @@
-FROM openjdk:openjdk-8-jre
+FROM openjdk:8u191-jre-alpine3.8
 
 EXPOSE 8080 8000 5900
 
