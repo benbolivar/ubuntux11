@@ -34,11 +34,11 @@ EXPOSE 6080 32745
 ENV DISPLAY :20.0 \
     MAVEN_VERSION=3.3.9 \
     TOMCAT_HOME=/home/user/tomcat8 \
-    M2_HOME=/home/user/apache-maven-$MAVEN_VERSION \
-    PATH=$M2_HOME/bin:$PATH
+    M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
+ENV PATH=$M2_HOME/bin:$PATH
 
-RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
-    sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/
+RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION
+RUN sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/
 RUN sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
     sudo rm -rf /home/user/tomcat8/webapps/*
 RUN sudo mkdir -p /etc/pki/tls/cert && \
