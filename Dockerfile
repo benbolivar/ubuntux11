@@ -6,24 +6,10 @@ ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl gnupg2 vim && \
+    supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user
-
-# install midori (browser), xserver, blackbox
-
-USER user
-
-RUN sudo apt-get update -qqy && \
-  sudo apt-get -qqy install \
-  supervisor \
-  x11vnc \
-  xvfb \
-  subversion \
-  net-tools \
-  blackbox \
-  rxvt-unicode \
-  xfonts-terminus
 
 USER root
 
