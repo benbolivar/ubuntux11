@@ -1,4 +1,4 @@
-FROM openjdk:8u181-jdk-stretch
+FROM openjdk:openjdk-8-jre
 
 EXPOSE 8080 8000 5900
 
@@ -66,7 +66,7 @@ ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 
 # Add run commands in /home/user/.bashrc
-RUN export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
+RUN echo "export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
 export TOMCAT_HOME=/home/user/tomcat8\n\
 export PATH=$M2_HOME/bin:$PATH\n\
 if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
