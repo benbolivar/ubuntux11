@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
     echo "secret\nsecret" | passwd user && \
     apt-get -qqy install supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus dbus-x11 python-numpy
     
-USER user
+#USER user
 
 # download and install noVNC, Firefox, Eclipse CDT, configure Blackbox
 RUN sudo mkdir -p /opt/noVNC/utils/websockify && \
@@ -54,7 +54,7 @@ RUN echo "export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
     sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc
 
 # Thanks to zmart/eclipse-cdt for ideas on unattended CDT install
-USER root
+#USER root
 ENV USER_NAME=user \
     HOME=/home/${USER_NAME}
 
