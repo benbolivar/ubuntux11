@@ -5,7 +5,7 @@ EXPOSE 8080 8000 5900
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl gnupg2 vim && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl gnupg2 vim \
     supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode xfonts-terminus && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
@@ -69,16 +69,14 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y software-properties-common 
-RUN apt-get update && apt-get install -y libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove
-RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module
-RUN apt-get install -y g++ build-essential gdb cmake
+RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove \
+    libgtk2.0-0 libcanberra-gtk-module g++ build-essential gdb cmake
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz
-RUN sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
+RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
+    sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
 
 USER user
 
