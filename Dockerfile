@@ -48,9 +48,6 @@ RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VE
 RUN sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
     sudo rm -rf /home/user/tomcat8/webapps/*
 
-ENV LANG en_GB.UTF-8
-ENV LANG en_US.UTF-8
-
 # Add run commands in /home/user/.bashrc
 RUN echo "export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
 export TOMCAT_HOME=/home/user/tomcat8\n\
