@@ -31,10 +31,10 @@ ADD keepalive.html /home/user/KeepAlive
 
 EXPOSE 6080 32745
 
-ENV DISPLAY :20.0 \
-    MAVEN_VERSION=3.3.9 \
-    TOMCAT_HOME=/home/user/tomcat8 \
-    M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
+ENV DISPLAY :20.0
+ENV MAVEN_VERSION=3.3.9 \
+    TOMCAT_HOME=/home/user/tomcat8
+ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 ENV PATH=$M2_HOME/bin:$PATH
 
 RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION
