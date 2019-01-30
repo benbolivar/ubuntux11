@@ -1,16 +1,11 @@
-FROM ubuntu
+FROM 8u181-jdk-stretch
 
 EXPOSE 8080 8000 5900
 
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata locales && \
-    cp /usr/share/zoneinfo/Asia/Manila /etc/localtime
-
-RUN apt-get update && \
-    apt-get -y install sudo procps wget unzip mc curl gnupg2 vim && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl gnupg2 vim && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user
@@ -32,9 +27,7 @@ RUN sudo apt-get update -qqy && \
 
 USER root
 
-RUN apt-get install -y libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy && \
-    wget http://archive.ubuntu.com/ubuntu/pool/universe/m/midori/midori_0.5.11-ds1-2_amd64.deb && \
-    dpkg -i midori_0.5.11-ds1-2_amd64.deb
+RUN apt-get install -y libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy
 
 USER user
 
@@ -42,12 +35,9 @@ USER user
 RUN sudo mkdir -p /opt/noVNC/utils/websockify && \
     wget -qO- "http://github.com/kanaka/noVNC/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC && \
     wget -qO- "https://github.com/kanaka/websockify/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC/utils/websockify && \
-    sudo apt-get install -y firefox && \
     sudo mkdir -p /etc/X11/blackbox && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
-    [exec] (Browser)     {midori} \n \
-    [exec] (Firefox)     {firefox} \n \
     [exec] (Eclipse CDT) {/opt/eclipse/eclipse} \n \
     [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu
 
@@ -67,7 +57,6 @@ ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 
 ENV PATH=$M2_HOME/bin:$PATH
 
-RUN sudo apt-get -qqy install openjdk-8-jre
 RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
   sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/
 RUN sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
@@ -77,14 +66,11 @@ ENV LANG en_GB.UTF-8
 ENV LANG en_US.UTF-8
 
 # Add run commands in /home/user/.bashrc
-RUN echo "export JAVA_HOME=/opt/jdk$JAVA_VERSION_PREFIX\n\
-export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
+RUN export M2_HOME=/home/user/apache-maven-$MAVEN_VERSION\n\
 export TOMCAT_HOME=/home/user/tomcat8\n\
-export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH\n\
+export PATH=$M2_HOME/bin:$PATH\n\
 if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
 sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc
-
-RUN sudo locale-gen en_US.UTF-8
 
 RUN sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
@@ -100,7 +86,7 @@ ENV HOME=/home/${USER_NAME}
 RUN apt-get update && apt-get install -y software-properties-common 
 RUN apt-get update && apt-get install -y libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove
 RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module
-RUN apt-get install -y g++ libboost-all-dev build-essential gdb cmake
+RUN apt-get install -y g++ build-essential gdb cmake
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
