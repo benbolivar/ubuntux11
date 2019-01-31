@@ -55,9 +55,8 @@ RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VE
 export TOMCAT_HOME=/home/user/tomcat8\n\
 export PATH=$M2_HOME/bin:$PATH\n\
 if [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi\n\
-sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc
-
-RUN sudo mkdir -p /etc/pki/tls/certs && \
+sudo date >> /home/user/date.log" | sudo tee -a /home/user/.bashrc && \
+sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem
