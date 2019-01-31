@@ -39,12 +39,12 @@ RUN sudo mkdir -p /opt/noVNC/utils/websockify && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
     [exec] (Eclipse CDT) {/opt/eclipse/eclipse} \n \
-    [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu
+    [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu && \
+    sudo mkdir -p /home/user/KeepAlive
+    
 
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
-
-RUN sudo mkdir -p /home/user/KeepAlive
 ADD keepalive.html /home/user/KeepAlive
 
 EXPOSE 6080 32745
@@ -58,8 +58,8 @@ ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 ENV PATH=$M2_HOME/bin:$PATH
 
 RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
-    sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
-    sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
+  sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/
+RUN sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
     sudo rm -rf /home/user/tomcat8/webapps/*
 
 # Add run commands in /home/user/.bashrc
@@ -80,8 +80,9 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove \
-    libgtk2.0-0 libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake
+RUN apt-get update && apt-get install -y software-properties-common 
+RUN apt-get update && apt-get install -y libxext-dev libxrender-dev libxtst-dev && apt-get -y autoremove
+RUN apt-get install -y libgtk2.0-0 libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
