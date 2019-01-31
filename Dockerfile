@@ -17,18 +17,14 @@ apt-get -qqy install \
   net-tools \
   blackbox \
   rxvt-unicode \
-  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy
-
-USER user
-
-# download and install noVNC, Firefox, Eclipse CDT, configure Blackbox
-RUN sudo mkdir -p /opt/noVNC/utils/websockify && \
+  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy && \
+sudo mkdir -p /opt/noVNC/utils/websockify && \
     wget -qO- "http://github.com/kanaka/noVNC/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC && \
     wget -qO- "https://github.com/kanaka/websockify/tarball/master" | sudo tar -zx --strip-components=1 -C /opt/noVNC/utils/websockify && \
     sudo mkdir -p /etc/X11/blackbox && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
-    [exec] (Eclipse CDT) {/opt/eclipse/eclipse} \n \
+    [exec] (Eclipse CDT2) {/opt/eclipse/eclipse} \n \
     [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu && \
     sudo mkdir -p /home/user/KeepAlive
     
