@@ -80,14 +80,13 @@ USER root
 ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 
-RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 \
-    libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake && apt-get -y autoremove
-
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz
-RUN sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
+RUN apt-get update && apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 \
+    libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake && apt-get -y autoremove && \
+    wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && tar -xf /tmp/eclipse.tar.gz -C /opt && rm /tmp/eclipse.tar.gz && \
+    sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
 
 USER user
 
