@@ -24,7 +24,7 @@ sudo mkdir -p /opt/noVNC/utils/websockify && \
     sudo mkdir -p /etc/X11/blackbox && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
-    [exec] (Eclipse CDT2) {/opt/eclipse/eclipse} \n \
+    [exec] (Eclipse CDggT2) {/opt/eclipse/eclipse} \n \
     [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu && \
     sudo mkdir -p /home/user/KeepAlive
     
