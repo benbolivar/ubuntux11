@@ -34,17 +34,10 @@ sudo mkdir -p /opt/noVNC/utils/websockify && \
     sudo mkdir -p /etc/X11/blackbox && \
     echo "[begin] (Blackbox) \n \
     [exec] (Terminal)    {urxvt -fn "xft:Terminus:size=14"} \n \
-    [exec] (Eclipse CDggT2) {/opt/eclipse/eclipse} \n \
+    [exec] (Eclipse CDT) {/opt/eclipse/eclipse} \n \
     [end]" | sudo tee -a /etc/X11/blackbox/blackbox-menu && \
-    sudo mkdir -p /home/user/KeepAlive
-    
-
-ADD index.html  /opt/noVNC/
-ADD supervisord.conf /opt/
-ADD keepalive.html /home/user/KeepAlive
-
-
-RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
+    sudo mkdir -p /home/user/KeepAlive &&\
+mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
     sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
     sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
     sudo rm -rf /home/user/tomcat8/webapps/* && \
@@ -61,6 +54,10 @@ sudo mkdir -p /etc/pki/tls/certs && \
     libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake && apt-get -y autoremove && \
     sudo wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && sudo tar -xf /tmp/eclipse.tar.gz -C /opt && sudo rm /tmp/eclipse.tar.gz && \
     sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
+    
+ADD index.html  /opt/noVNC/
+ADD supervisord.conf /opt/
+ADD keepalive.html /home/user/KeepAlive
 
 USER user
 
