@@ -2,22 +2,22 @@ FROM openjdk:8u181-jre-slim-stretch
 
 EXPOSE 8080 8000 5900 6080 32745
 
-ENV TERM xterm
-ENV DISP_SIZE 1600x900x16
-ENV DISPLAY :20.0
-ENV MAVEN_VERSION=3.3.9 \
-    TOMCAT_HOME=/home/user/tomcat8
-ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
-ENV PATH=$M2_HOME/bin:$PATH
-ENV USER_NAME=user
-ENV HOME=/home/${USER_NAME}
+ENV TERM xterm \
+    DISP_SIZE 1600x900x16 \
+    DISPLAY :20.0 \
+    MAVEN_VERSION=3.3.9 \
+    TOMCAT_HOME=/home/user/tomcat8 \
+    M2_HOME=/home/user/apache-maven-$MAVEN_VERSION \
+    PATH=$M2_HOME/bin:$PATH \
+    USER_NAME=user \
+    HOME=/home/${USER_NAME}
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo procps wget unzip mc curl gnupg2 vim \
  supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode \
-  xfonts-terminus dbus-x11 python-numpy && \
+  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 libsoup-gnome2.4-1 libzeitgeist-2.0-0 dbus-x11 python-numpy && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user && \
@@ -43,7 +43,8 @@ sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem && \
-  sudo apt-get install -y g++ build-essential gdb cmake && apt-get -y autoremove && \
+  sudo apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 \
+    libcanberra-gtk-module g++ libboost-all-dev build-essential gdb cmake && apt-get -y autoremove && \
     sudo wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && sudo tar -xf /tmp/eclipse.tar.gz -C /opt && sudo rm /tmp/eclipse.tar.gz && \
     sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
     
@@ -55,8 +56,8 @@ USER user
 
 WORKDIR /projects
 
-ENV ECLIPSE_WORKSPACE=/projects/eclipse-workspace
-ENV ECLIPSE_DOT=/projects/.eclipse
-ENV DELAY=50
+ENV ECLIPSE_WORKSPACE=/projects/eclipse-workspace \
+    ECLIPSE_DOT=/projects/.eclipse
+    DELAY=50
 
 CMD /usr/bin/supervisord -c /opt/supervisord.conf -l /home/user/supervisor.log -e trace & sleep 365d
