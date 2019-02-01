@@ -15,9 +15,9 @@ ENV HOME=/home/${USER_NAME}
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl gnupg2 vim \
- supervisor x11vnc xvfb subversion net-tools blackbox rxvt-unicode \
-  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 dbus-x11 python-numpy && \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim \
+ supervisor x11vnc xvfb subversion blackbox rxvt-unicode \
+  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 dbus-x11 && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
     echo "secret\nsecret" | passwd user && \
@@ -44,7 +44,7 @@ sudo mkdir -p /etc/pki/tls/certs && \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem && \
   sudo apt-get install -y software-properties-common libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 \
-    libcanberra-gtk-module g++ build-essential gdb cmake && apt-get -y autoremove && \
+    libcanberra-gtk-module g++ gdb cmake && apt-get -y autoremove && \
     sudo wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && sudo tar -xf /tmp/eclipse.tar.gz -C /opt && sudo rm /tmp/eclipse.tar.gz && \
     sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini
     
