@@ -1,9 +1,19 @@
 FROM openjdk:8u181-jre-slim-stretch
 
-EXPOSE 8080 8000 5900
+EXPOSE 8080 8000 5900 6080 32745
 
 ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
+ENV DISPLAY :20.0
+ENV MAVEN_VERSION=3.3.9 \
+    TOMCAT_HOME=/home/user/tomcat8
+ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
+ENV PATH=$M2_HOME/bin:$PATH
+ENV USER_NAME=user
+ENV HOME=/home/${USER_NAME}
+
+ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
+ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo procps wget unzip mc curl gnupg2 vim && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
@@ -33,21 +43,7 @@ ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
 ADD keepalive.html /home/user/KeepAlive
 
-EXPOSE 6080 32745
-ENV DISPLAY :20.0
 
-ENV MAVEN_VERSION=3.3.9 \
-    TOMCAT_HOME=/home/user/tomcat8
-
-ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
-
-ENV PATH=$M2_HOME/bin:$PATH
-USER root
-ENV USER_NAME=user
-ENV HOME=/home/${USER_NAME}
-
-ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
-ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 RUN mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
     sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
     sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
