@@ -17,7 +17,7 @@ ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
 #  xfonts-terminus libjavascriptcoregtk-1.0-0 libwebkitgtk-1.0-0 libgck-1-0 libgcr-base-3-1 dbus-x11 && \
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim \
- supervisor x11vnc xvfb subversion blackbox rxvt-unicode \
+ supervisor x11vnc xvfb subversion fluxbox rxvt-unicode \
   xfonts-terminus dbus-x11 && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
@@ -52,6 +52,7 @@ sudo mkdir -p /etc/pki/tls/certs && \
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
 ADD keepalive.html /home/user/KeepAlive
+ADD menu /home/user/menu
 
 USER user
 
