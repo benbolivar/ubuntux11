@@ -17,13 +17,13 @@
 [begin] (Fluxbox-1.3.7)
 [encoding] {UTF-8}
       [exec] (Terminal) {urxvt -fn "xft:Terminus:size=14"}
-      [exec] (firefox) {}
+      [exec] (File Manager) {urxvt -fn "xft:Terminus:size=14" -e mc}
       [exec] (Eclipse CDT) {/opt/eclipse/eclipse}
 [submenu] (Editors)
-      [exec]   (vi) {xterm -e vi}
+      [exec]   (vim) {urxvt -fn "xft:Terminus:size=14" -e vim}
 [end]
 [submenu] (System Tools)
-      [exec]   (top) {xterm -e top}
+      [exec]   (top) {urxvt -fn "xft:Terminus:size=14" -e top}
 [end]
 [submenu] (Fluxbox menu)
       [config] (Configure)
