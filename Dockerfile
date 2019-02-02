@@ -40,14 +40,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
         \nexport PATH=$M2_HOME/bin:$PATH\
         \nif [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\
         \nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi" | sudo tee -a /home/user/.bashrc
-    
+
+USER user
+
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
 ADD keepalive.html /home/user/KeepAlive
 ADD menu /home/user/menu
 ADD init /home/user/init
-
-USER user
 
 WORKDIR /projects
 
