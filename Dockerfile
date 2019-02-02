@@ -1,4 +1,5 @@
-FROM openjdk:8u181-jre-slim-stretch
+#FROM openjdk:8u181-jre-slim-stretch
+FROM openjdk:7u181-jre
 
 EXPOSE 8080 8000 5900 6080 32745
 
@@ -26,6 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils sudo 
     sudo mkdir -p /home/user/KeepAlive &&\
     mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
     sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
+    sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
+    sudo rm -rf /home/user/tomcat8/webapps/* && \
     sudo mkdir -p /etc/pki/tls/certs && \
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
@@ -38,9 +41,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils sudo 
         \nexport PATH=$M2_HOME/bin:$PATH\
         \nif [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\
         \nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi" | sudo tee -a /home/user/.bashrc
-
-#    sudo wget -qO- "http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz" | sudo tar -zx --strip-components=1 -C /home/user/tomcat8 && \
-#    sudo rm -rf /home/user/tomcat8/webapps/* && \
 
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
