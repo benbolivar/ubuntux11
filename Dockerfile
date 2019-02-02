@@ -1,5 +1,5 @@
 #FROM openjdk:8u181-jre-slim-stretch
-FROM openjdk:7u181-jre
+FROM openjdk:8u181-jre
 
 EXPOSE 8080 8000 5900 6080 32745
 
@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils sudo 
         \nexport PATH=$M2_HOME/bin:$PATH\
         \nif [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\
         \nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi" | sudo tee -a /home/user/.bashrc
+#
 
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
