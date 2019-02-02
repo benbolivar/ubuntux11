@@ -6,14 +6,11 @@ ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 ENV DISPLAY :20.0
 ENV MAVEN_VERSION=3.3.9 \
-    TOMCAT_HOME=/home/user/tomcat8 \
-    M2_HOME=/home/user/apache-maven-$MAVEN_VERSION \
-    PATH=$M2_HOME/bin:$PATH \
-    USER_NAME=user \
-    HOME=/home/${USER_NAME} \
-    ECLIPSE_WORKSPACE=/projects/eclipse-workspace \
-    ECLIPSE_DOT=/projects/.eclipse \
-    DELAY=50
+    TOMCAT_HOME=/home/user/tomcat8
+ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
+ENV PATH=$M2_HOME/bin:$PATH
+ENV USER_NAME=user
+ENV HOME=/home/${USER_NAME}
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
@@ -53,5 +50,9 @@ ADD menu /home/user/menu
 USER user
 
 WORKDIR /projects
+
+ENV ECLIPSE_WORKSPACE=/projects/eclipse-workspace
+ENV ECLIPSE_DOT=/projects/.eclipse
+ENV DELAY=50
 
 CMD /usr/bin/supervisord -c /opt/supervisord.conf & sleep 365d
