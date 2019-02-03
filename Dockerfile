@@ -9,9 +9,9 @@ ENV MAVEN_VERSION=3.3.9 \
     TOMCAT_HOME=/home/user/tomcat8
 ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
 ENV PATH=$M2_HOME/bin:$PATH
-ENV HOME=/home/${USER_NAME}
-ENV DEBIAN_FRONTEND=noninteractive
-ENV USER_NAME=user
+ENV USER_NAME=user \
+    HOME=/home/user \
+    DEBIAN_FRONTEND=noninteractive
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
@@ -52,8 +52,8 @@ USER user
 
 WORKDIR /projects
 
-ENV ECLIPSE_WORKSPACE=/projects/eclipse-workspace
-ENV ECLIPSE_DOT=/projects/.eclipse
-ENV DELAY=50
+ENV ECLIPSE_WORKSPACE=/projects/eclipse-workspace \
+    ECLIPSE_DOT=/projects/.eclipse \
+    DELAY=50
 
 CMD /usr/bin/supervisord -c /opt/supervisord.conf & sleep 365d
