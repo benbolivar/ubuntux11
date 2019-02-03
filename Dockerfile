@@ -45,8 +45,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
 ADD keepalive.html /home/user/KeepAlive
-ADD menu /home/user/.menu
-ADD init /home/user/.init
+ADD --chown user:user menu /home/user/.menu
+ADD --chown user:user init /home/user/.init
 
 USER user
 
