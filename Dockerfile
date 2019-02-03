@@ -41,13 +41,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
         \nif [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\
         \nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi" | sudo tee -a /home/user/.bashrc
 
-USER user
-
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
 ADD --chown=user:user keepalive.html /home/user/KeepAlive
 ADD --chown=user:user menu /home/user/.menu
 ADD --chown=user:user init /home/user/.init
+
+USER user
 
 WORKDIR /projects
 
