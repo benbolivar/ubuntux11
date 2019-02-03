@@ -8,9 +8,9 @@ ENV DISPLAY :20.0
 ENV MAVEN_VERSION=3.3.9 \
     TOMCAT_HOME=/home/user/tomcat8
 ENV M2_HOME=/home/user/apache-maven-$MAVEN_VERSION
-ENV PATH=$M2_HOME/bin:$PATH
-ENV USER_NAME=user
-ENV HOME=/home/${USER_NAME}
+ENV PATH=$M2_HOME/bin:$PATH \
+    USER_NAME=user \
+    HOME=/home/${USER_NAME}
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
