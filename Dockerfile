@@ -16,8 +16,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-RUN sudo add-apt-repository ppa:webupd8team/y-ppa-manager && \
-    sudo apt-get update && sudo apt-get install y-ppa-manager && \
+RUN add-apt-repository ppa:webupd8team/y-ppa-manager && \
+    apt-get update && apt-get install y-ppa-manager && \
     echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >> /etc/apt/sources.list && \
     apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim supervisor \
     x11vnc xvfb subversion fluxbox rxvt-unicode xfonts-terminus dbus-x11 software-properties-common python-numpy firefox && \
