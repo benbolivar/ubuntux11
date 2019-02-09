@@ -16,13 +16,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
-#RUN add-apt-repository ppa:webupd8team/y-ppa-manager && \
-#    apt-get update && apt-get install y-ppa-manager && \
-#    echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >> /etc/apt/sources.list && \
-#    \
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim supervisor \
         x11vnc xvfb subversion fluxbox rxvt-unicode xfonts-terminus dbus-x11 software-properties-common python-numpy \
-        libjavascriptcoregtk-3.0-0 libwebkitgtk-3.0-0 && \
+        libjavascriptcoregtk-3.0-0 libwebkitgtk-3.0-0 at-spi2-core && \
     \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
@@ -40,10 +36,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
     sudo openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/pki/tls/certs/novnc.pem -out /etc/pki/tls/certs/novnc.pem -days 3650 \
          -subj "/C=PH/ST=Cebu/L=Cebu/O=NA/OU=NA/CN=codenvy.io" && \
     sudo chmod 444 /etc/pki/tls/certs/novnc.pem && \
-    sudo apt-get install -y libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 libcanberra-gtk-module g++ gdb cmake && apt-get -y autoremove && \
+    sudo apt-get install -y libxext-dev libxrender-dev libxtst-dev libcanberra-gtk-module g++ gdb cmake && apt-get -y autoremove && \
     \
     sudo wget ${ECLIPSE_MIRROR}/${ECLIPSE_TAR} -O /tmp/eclipse.tar.gz -q && sudo tar -xf /tmp/eclipse.tar.gz -C /opt && sudo rm /tmp/eclipse.tar.gz && \
-    sudo sed "s/@user.home/\/projects/g" -i /opt/eclipse/eclipse.ini && \
+    sudo sed "s/@user.home\/eclipse-workspace/\/projects/g" -i /opt/eclipse/eclipse.ini && \
     \
     mkdir /home/user/cbuild /home/user/tomcat8 /home/user/apache-maven-$MAVEN_VERSION && \
     sudo wget -qO- "http://apache.ip-connect.vn.ua/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" | tar -zx --strip-components=1 -C /home/user/apache-maven-$MAVEN_VERSION/ && \
@@ -55,6 +51,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialo
         \nexport PATH=$M2_HOME/bin:$PATH\
         \nif [ ! -f /projects/KeepAlive/keepalive.html ]\nthen\
         \nsleep 5\ncp -rf /home/user/KeepAlive /projects\nfi" | sudo tee -a /home/user/.bashrc
+
+#    sudo apt-get install -y libxext-dev libxrender-dev libxtst-dev libgtk2.0-0 libcanberra-gtk-module g++ gdb cmake && apt-get -y autoremove && \
 
 ADD index.html  /opt/noVNC/
 ADD supervisord.conf /opt/
