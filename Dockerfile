@@ -2,7 +2,7 @@ FROM openjdk:8u181-jre-slim-stretch
 
 EXPOSE 8080 8000 5900 6080 32745
 
-ENV TERM rxvt-unicode
+ENV TERM xterm
 ENV DISP_SIZE 1600x900x16
 ENV DISPLAY :20.0
 ENV MAVEN_VERSION=3.3.9 \
@@ -17,7 +17,7 @@ ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/ph
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim supervisor \
-        x11vnc xvfb subversion fluxbox rxvt-unicode xfonts-terminus dbus-x11 software-properties-common python-numpy \
+        x11vnc xvfb subversion fluxbox xterm xfonts-terminus dbus-x11 software-properties-common python-numpy \
         libjavascriptcoregtk-3.0-0 libwebkitgtk-3.0-0 at-spi2-core && \
     \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
