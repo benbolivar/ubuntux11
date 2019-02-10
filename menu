@@ -21,10 +21,10 @@
       [exec] (File Manager) {xterm -fa "xft:DejaVu Sans Mono:pixelsize=18,style=book" -e mc}
       [exec] (Eclipse CDT) {/opt/eclipse/eclipse}
 [submenu] (Editors)
-      [exec]   (vim) {urxvt -e vim}
+      [exec]   (vim) {xterm -fa "xft:DejaVu Sans Mono:pixelsize=18,style=book" -e vim}
 [end]
 [submenu] (System Tools)
-      [exec]   (top) {"xft:DejaVu Sans Mono:pixelsize=18,style=book" -e top}
+      [exec]   (top) {xterm -fa "xft:DejaVu Sans Mono:pixelsize=18,style=book" -e top}
 [end]
 [submenu] (Fluxbox menu)
       [config] (Configure)
