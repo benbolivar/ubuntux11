@@ -13,12 +13,19 @@ ENV USER_NAME=user
 ENV HOME=/home/${USER_NAME}
 ENV DEBIAN_FRONTEND=noninteractive
 
+ENV DOCKER_VERSION=1.6.0 \
+    DOCKER_BUCKET=get.docker.com \
+    CHE_IN_CONTAINER=true \
+
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils dialog sudo wget unzip mc curl vim supervisor \
         x11vnc xvfb subversion fluxbox xterm xfonts-terminus dbus-x11 software-properties-common python-numpy \
         libjavascriptcoregtk-3.0-0 libwebkitgtk-3.0-0 at-spi2-core && \
+    \
+    curl -sSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}" -o /usr/bin/docker && \
+    chmod +x /usr/bin/docker && \
     \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd -u 1000 -G users,sudo -d /home/user --shell /bin/bash -m user && \
