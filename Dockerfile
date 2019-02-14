@@ -15,7 +15,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DOCKER_VERSION=1.6.0 \
     DOCKER_BUCKET=get.docker.com \
-    CHE_IN_CONTAINER=true \
+    CHE_IN_CONTAINER=true
 
 ARG ECLIPSE_MIRROR=http://ftp.fau.de/eclipse/technology/epp/downloads/release/photon/R
 ARG ECLIPSE_TAR=eclipse-cpp-photon-R-linux-gtk-x86_64.tar.gz
